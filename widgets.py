@@ -1,7 +1,5 @@
 import tkinter as tk
 
-num_task = 0
-
 #функция очищения окна
 def clear_frame(frame):
     for widget in frame.winfo_children():
@@ -14,7 +12,7 @@ def show_menu(frame):
     btn_tack = tk.Button(frame, text='Показать все задачи', command=lambda: show_tasks(frame))
     btn_tack.place(x=200, y=50, width=200)
     
-    btn3 = tk.Button(frame, text='Добавить задачу', command=lambda: add_tasks(frame, num_task))
+    btn3 = tk.Button(frame, text='Добавить задачу', command=lambda: add_tasks(frame))
     btn3.place(x=200, y=100, width=200)
     
     btn4 = tk.Button(frame, text='Отметить как выполненную')
@@ -37,7 +35,7 @@ def show_tasks(frame):
     
     
 #добавить задачу
-def add_tasks(frame, num_task):
+def add_tasks(frame):
     clear_frame(frame)
     
     lbl = tk.Label(frame, text="Введите новую задачу:", background='linen')
@@ -47,14 +45,18 @@ def add_tasks(frame, num_task):
     entry_task.place(x=200, y=80, width=200)
     entry_task.focus()
     
+    with open('todo.txt', 'r', encoding='utf-8') as f:
+        num_task = len(f.readlines())
+    
     # сохранение новой задачи
     def save_task(num_task):
         task = entry_task.get()
-        num_task += 1
         with open('todo.txt', 'a', encoding='utf-8') as task_file:
-            task_file.write( '[ ] ' + str(num_task) + '. ' + task + '\n')
+            task_file.write('[ ] ' + str(num_task) + '. ' + task + '\n')
         entry_task.delete(0, tk.END)
         show_menu(frame)
     
-    btn_save = tk.Button(frame, text='Сохранить', command=lambda: save_task(num_task))
+    btn_save = tk.Button(frame,
+                         text='Сохранить',
+                         command=lambda: save_task(num_task))
     btn_save.place(x=200, y=120, width=200)
