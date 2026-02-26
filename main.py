@@ -1,24 +1,19 @@
 import tkinter as tk
-from tkinter import * 
-from tkinter import messagebox
-from widgets import menu
+from widgets import show_menu, show_tasks
 
-root = Tk()
+root = tk.Tk()
 root.title("Список задач")
 root.geometry("600x400")
 
-frame = Frame(
-   root,
-   padx=10,
-   pady=10,
-   background= 'linen'
-)
-frame.pack(fill='both')
+header_frame = tk.Frame(root, background='gray25', height=50)
+header_frame.pack(fill='x', side='top')
 
+frame = tk.Frame(root, background='linen')
+frame.pack(fill='both', expand=True)
 
-button_menu = Button(root, text='Меню', command=menu)
-button_menu.place(x=300,y=0)
+btn_menu = tk.Button(header_frame, text='Главное меню', command=lambda: show_menu(frame))
+btn_menu.pack(pady=10)
 
-frame.pack(expand=True)
+show_menu(frame)
 
 root.mainloop()
