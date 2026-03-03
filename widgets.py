@@ -3,13 +3,13 @@ from tkinter import messagebox
 from datetime import datetime
 import re
 
-# функция очищения окна
-def clear_frame(frame):
+
+def clear_frame(frame):  # функция очищения окна
     for widget in frame.winfo_children():
         widget.destroy()
 
-# функция вызова меню с необходимыми кнопками
-def show_menu(frame):
+
+def show_menu(frame):  # функция вызова меню с необходимыми кнопками
     clear_frame(frame)
     
     btn_tack = tk.Button(frame, text='Показать все задачи',
@@ -32,20 +32,19 @@ def show_menu(frame):
                         command=lambda: delete_task(frame))
     btn_del.place(x=200, y=250, width=200)
 
-# показать все задачи
-def show_tasks(frame, sort_by_status=False):
+
+def show_tasks(frame, sort_by_status=False):  # показать все задачи
     clear_frame(frame)
-    
-    # сортировка
-    if sort_by_status:
+    if sort_by_status:  # сортировка
         btn_sort = tk.Button(frame, text='Показать все',
-                             command=lambda: show_tasks(frame, sort_by_status=False))
+                             command=lambda: show_tasks(frame,
+                                                        sort_by_status=False))
         btn_sort.place(x=400, y=10, width=150)
     else:
         btn_sort = tk.Button(frame, text='Сортировать',
-                             command=lambda: show_tasks(frame, sort_by_status=True))
+                             command=lambda: show_tasks(frame,
+                                                        sort_by_status=True))
         btn_sort.place(x=400, y=10, width=150)
-    
     with open('todo.txt', 'r', encoding='utf-8') as task_file:
         tasks = task_file.readlines()
 
@@ -54,11 +53,9 @@ def show_tasks(frame, sort_by_status=False):
         lbl.place(x=230, y=50)
     else:
         if sort_by_status:
-            # Сортировка
             incomplete = [t for t in tasks if '[ ]' in t]
             completed = [t for t in tasks if '[X]' in t]
             tasks = incomplete + completed
-            
         y_position = 50
         for task in tasks:
             task_lbl = tk.Label(frame, text=task.strip(), background='linen',
@@ -67,8 +64,7 @@ def show_tasks(frame, sort_by_status=False):
             y_position += 40
             
     
-# добавить задачу
-def add_tasks(frame):
+def add_tasks(frame):  # добавить задачу
     clear_frame(frame)
     
     lbl = tk.Label(frame, text="Введите новую задачу:", background='linen')
@@ -77,16 +73,15 @@ def add_tasks(frame):
     entry_task = tk.Entry(frame, width=30)
     entry_task.place(x=200, y=80, width=200)
     entry_task.focus()
-
-    # сохранение новой задачи
-    def save_task():
+    
+    def save_task():  # сохранение новой задачи
         task = entry_task.get()
         if task.strip():
             with open('todo.txt', 'r', encoding='utf-8') as f:
                 num_task = len(f.readlines()) + 1
             # дата
             current_date = datetime.now().strftime('%d.%m.%Y')
-            
+    
             with open('todo.txt', 'a', encoding='utf-8') as task_file:
                 task_file.write(f'[ ] {num_task}. {task} ({current_date})\n')
             
@@ -96,18 +91,20 @@ def add_tasks(frame):
     btn_save = tk.Button(frame, text='Сохранить', command=save_task)
     btn_save.place(x=200, y=120, width=200)
 
-# редактировать задачу
-def edit_task(frame):
+
+def edit_task(frame):  # редактировать задачу
     clear_frame(frame)
     
-    lbl = tk.Label(frame, text="Введите номер задачи для редактирования:", background='linen')
+    lbl = tk.Label(frame, text="Введите номер задачи для редактирования:",
+                   background='linen')
     lbl.place(x=175, y=50, width=250)
 
     entry_num = tk.Entry(frame, width=10)
     entry_num.place(x=275, y=80, width=50)
     entry_num.focus()
 
-    lbl2 = tk.Label(frame, text="Введите новый текст задачи:", background='linen')
+    lbl2 = tk.Label(frame, text="Введите новый текст задачи:",
+                    background='linen')
     lbl2.place(x=190, y=120, width=220)
 
     entry_task = tk.Entry(frame, width=30)
@@ -129,7 +126,11 @@ def edit_task(frame):
         
         # извлечение старой даты
         date_match = re.search(r'\(\d{2}\.\d{2}\.\d{4}\)', original)
-        date_str = date_match.group() if date_match else f'({datetime.now().strftime("%d.%m.%Y")})'
+        date_str = (
+            date_match.group()
+            if date_match
+            else f'({datetime.now().strftime("%d.%m.%Y")})'
+        )
             
         # сохранение    
         tasks[task_num - 1] = f'{status} {task_num}. {new_text} {date_str}\n'
@@ -143,8 +144,7 @@ def edit_task(frame):
     btn_save.place(x=200, y=190, width=200)
 
 
-# отметить задачу как выполненную
-def complete_task(frame):
+def complete_task(frame):  # отметить задачу как выполненную
     clear_frame(frame)
     
     with open('todo.txt', 'r', encoding='utf-8') as task_file:
@@ -172,8 +172,8 @@ def complete_task(frame):
                 
         y_position += 40
 
-# удалить задачу
-def delete_task(frame):
+
+def delete_task(frame):  # удалить задачу
     clear_frame(frame)
     
     with open('todo.txt', 'r', encoding='utf-8') as task_file:

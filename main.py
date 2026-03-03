@@ -1,5 +1,5 @@
 import tkinter as tk
-from widgets import show_menu, show_tasks
+from widgets import show_menu
 
 root = tk.Tk()
 root.title("Список задач")
