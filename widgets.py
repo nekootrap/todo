@@ -4,41 +4,95 @@ from datetime import datetime
 import re
 
 
-def clear_frame(frame):  # функция очищения окна
+def clear_frame(frame: tk.Frame) -> None:
+    """Очистить окно
+
+    Args:
+        frame (tk.Frame): окно программы
+    """
+
     for widget in frame.winfo_children():
         widget.destroy()
 
 
-def show_menu(frame):  # функция вызова меню с необходимыми кнопками
+def show_menu(frame: tk.Frame) -> None:
+    """Показать меню с необходимыми кнопками
+
+    Args:
+        frame (tk.Frame): окно программы
+    """
+
     clear_frame(frame)
 
     btn_tack = tk.Button(
-        frame, text="Показать все задачи", command=lambda: show_tasks(frame)
+        frame,
+        text="Показать все задачи",
+        command=lambda: show_tasks(frame)
     )
-    btn_tack.place(x=200, y=50, width=200)
 
-    btn_add = tk.Button(frame, text="Добавить задачу",
-                        command=lambda: add_tasks(frame))
-    btn_add.place(x=200, y=100, width=200)
+    btn_tack.place(
+        x=200,
+        y=50,
+        width=200
+    )
+
+    btn_add = tk.Button(
+        frame,
+        text="Добавить задачу",
+        command=lambda: add_tasks(frame)
+    )
+
+    btn_add.place(
+        x=200,
+        y=100,
+        width=200
+    )
 
     btn_edit = tk.Button(
-        frame, text="Редактировать задачу", command=lambda: edit_task(frame)
+        frame,
+        text="Редактировать задачу",
+        command=lambda: edit_task(frame)
     )
-    btn_edit.place(x=200, y=150, width=200)
+
+    btn_edit.place(
+        x=200,
+        y=150,
+        width=200
+    )
 
     btn_mark = tk.Button(
-        frame, text="Отметить как выполненную",
+        frame,
+        text="Отметить как выполненную",
         command=lambda: complete_task(frame)
     )
-    btn_mark.place(x=200, y=200, width=200)
+
+    btn_mark.place(
+        x=200,
+        y=200,
+        width=200
+    )
 
     btn_del = tk.Button(
-        frame, text="Удалить задачу", command=lambda: delete_task(frame)
+        frame,
+        text="Удалить задачу",
+        command=lambda: delete_task(frame)
     )
-    btn_del.place(x=200, y=250, width=200)
+
+    btn_del.place(
+        x=200,
+        y=250,
+        width=200
+    )
 
 
-def show_tasks(frame, sort_by_status=False):  # показать все задачи
+def show_tasks(frame: tk.Frame, sort_by_status: bool = False) -> None:
+    """Показать список задач
+
+    Args:
+        frame (tk.Frame): окно программы
+        sort_by_status (bool, optional): сортировка. По умолчанию False
+    """
+
     clear_frame(frame)
     if sort_by_status:  # сортировка
         btn_sort = tk.Button(
@@ -46,19 +100,31 @@ def show_tasks(frame, sort_by_status=False):  # показать все зада
             text="Показать все",
             command=lambda: show_tasks(frame, sort_by_status=False),
         )
-        btn_sort.place(x=400, y=10, width=150)
+        btn_sort.place(
+            x=400,
+            y=10,
+            width=150
+        )
     else:
         btn_sort = tk.Button(
             frame,
             text="Сортировать",
             command=lambda: show_tasks(frame, sort_by_status=True),
         )
-        btn_sort.place(x=400, y=10, width=150)
+        btn_sort.place(
+            x=400,
+            y=10,
+            width=150
+        )
     with open("todo.txt", "r", encoding="utf-8") as task_file:
         tasks = task_file.readlines()
 
     if not tasks:
-        lbl = tk.Label(frame, text="Список задач пуст", background="linen")
+        lbl = tk.Label(
+            frame,
+            text="Список задач пуст",
+            background="linen"
+        )
         lbl.place(x=230, y=50)
     else:
         if sort_by_status:
@@ -78,18 +144,43 @@ def show_tasks(frame, sort_by_status=False):  # показать все зада
             y_position += 40
 
 
-def add_tasks(frame):  # добавить задачу
+def add_tasks(frame: tk.Frame) -> None:
+    """Добавить новую задачу
+
+    Args:
+        frame (tk.Frame): окно программы
+    """
+
     clear_frame(frame)
 
-    lbl = tk.Label(frame, text="Введите новую задачу:", background="linen")
-    lbl.place(x=200, y=50, width=200)
+    lbl = tk.Label(
+        frame,
+        text="Введите новую задачу:",
+        background="linen"
+    )
+
+    lbl.place(
+        x=200,
+        y=50,
+        width=200
+    )
 
     entry_task = tk.Entry(frame, width=30)
-    entry_task.place(x=200, y=80, width=200)
+
+    entry_task.place(
+        x=200,
+        y=80,
+        width=200
+    )
+
     entry_task.focus()
 
-    def save_task():  # сохранение новой задачи
+    def save_task() -> None:
+        """Сохранить новую задачу
+        """
+
         task = entry_task.get()
+
         if task.strip():
             with open("todo.txt", "r", encoding="utf-8") as f:
                 num_task = len(f.readlines()) + 1
@@ -102,11 +193,26 @@ def add_tasks(frame):  # добавить задачу
             entry_task.delete(0, tk.END)
             show_menu(frame)
 
-    btn_save = tk.Button(frame, text="Сохранить", command=save_task)
-    btn_save.place(x=200, y=120, width=200)
+    btn_save = tk.Button(
+        frame,
+        text="Сохранить",
+        command=save_task
+    )
+
+    btn_save.place(
+        x=200,
+        y=120,
+        width=200
+    )
 
 
-def edit_task(frame):  # редактировать задачу
+def edit_task(frame: tk.Frame) -> None:
+    """Редактировать задачу
+
+    Args:
+        frame (tk.Frame): окно программы
+    """
+
     clear_frame(frame)
 
     lbl = tk.Label(
@@ -114,20 +220,31 @@ def edit_task(frame):  # редактировать задачу
         text="Введите номер задачи для редактирования:",
         background="linen"
     )
-    lbl.place(x=175, y=50, width=250)
+
+    lbl.place(
+        x=175,
+        y=50,
+        width=250
+    )
 
     entry_num = tk.Entry(frame, width=10)
     entry_num.place(x=275, y=80, width=50)
     entry_num.focus()
 
-    lbl2 = tk.Label(frame, text="Введите новый текст задачи:",
-                    background="linen")
+    lbl2 = tk.Label(
+        frame,
+        text="Введите новый текст задачи:",
+        background="linen"
+    )
     lbl2.place(x=190, y=120, width=220)
 
     entry_task = tk.Entry(frame, width=30)
     entry_task.place(x=200, y=150, width=200)
 
-    def save_edit():
+    def save_edit() -> None:
+        """Сохранить изменения в задаче
+        """
+
         task_num = int(entry_num.get())
         new_text = entry_task.get()
 
@@ -161,7 +278,13 @@ def edit_task(frame):  # редактировать задачу
     btn_save.place(x=200, y=190, width=200)
 
 
-def complete_task(frame):  # отметить задачу как выполненную
+def complete_task(frame: tk.Frame) -> None:
+    """Отметить задачу выполненной
+
+    Args:
+        frame (tk.Frame): окно программы
+    """
+
     clear_frame(frame)
 
     with open("todo.txt", "r", encoding="utf-8") as task_file:
@@ -174,7 +297,13 @@ def complete_task(frame):  # отметить задачу как выполне
 
         if "[ ]" in task:
 
-            def mark_done(index=i):
+            def mark_done(index: int = i) -> None:
+                """Отметить задачу выполненой
+
+                Args:
+                    index (int, optional): Индекс. Defaults to i.
+                """
+
                 with open("todo.txt", "r", encoding="utf-8") as f:
                     all_tasks = f.readlines()
 
@@ -191,7 +320,13 @@ def complete_task(frame):  # отметить задачу как выполне
         y_position += 40
 
 
-def delete_task(frame):  # удалить задачу
+def delete_task(frame: tk.Frame) -> None:
+    """Удалить задачу
+
+    Args:
+        frame (tk.Frame): окно программы
+    """
+
     clear_frame(frame)
 
     with open("todo.txt", "r", encoding="utf-8") as task_file:
@@ -202,7 +337,13 @@ def delete_task(frame):  # удалить задачу
         task_lbl = tk.Label(frame, text=task.strip(), background="linen")
         task_lbl.place(x=150, y=y_position, width=300)
 
-        def delete_one(index=i):
+        def delete_one(index: int = i) -> None:
+            """Удалить одну задачу
+
+            Args:
+                index (int, optional): Индекс. Defaults to i.
+            """
+
             with open("todo.txt", "r", encoding="utf-8") as f:
                 all_tasks = f.readlines()
 
@@ -211,7 +352,8 @@ def delete_task(frame):  # удалить задачу
             with open("todo.txt", "w", encoding="utf-8") as f:
                 for num, t in enumerate(all_tasks, 1):
                     content = t.split(". ", 1)[1] if ". " in t else t
-                    f.write(f"[ ] {num}. {content}")
+                    status = "[X]" if "[X]" in content else "[ ]"
+                    f.write(f"{status} {num}. {content}")
 
             delete_task(frame)
 
